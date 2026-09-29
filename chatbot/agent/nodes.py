@@ -17,9 +17,11 @@ SYSTEM_PROMPT = """
 
 def generate(state: AgentState):
 
+    history=state.get("history",[])
+
     messages=[
         SystemMessage(content=f"{SYSTEM_PROMPT}"),
-        *state["history"],
+        *history,
         HumanMessage(content=state["question"])
     ]
 
@@ -30,6 +32,6 @@ def generate(state: AgentState):
     )
 
     return {
-        "history": state["history"] + [HumanMessage(content=state["question"]), AIMessage(content=response)],
+        "history": history + [HumanMessage(content=state["question"]), AIMessage(content=response)],
         "answer": response
     }
