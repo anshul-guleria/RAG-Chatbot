@@ -3,10 +3,11 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+provider=os.getenv("MODEL_PROVIDER","")
 gemini_model=os.getenv("GEMINI_MODEL", "gemini...")
 groq_model=os.getenv("GROQ_MODEL", "gpt...")
 
-def create_llm(provider: str, temperature: float = 0.0):
+def create_llm(provider: str = provider, temperature: float = 0.0):
     
     if provider=='google' or provider=='gemini':
         try:
