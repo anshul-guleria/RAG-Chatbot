@@ -1,7 +1,6 @@
 .venv/
 __pycache__/
 outputs/
-qdrant_data/
 
 .env
 test.py
