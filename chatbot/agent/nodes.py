@@ -89,7 +89,10 @@ def route_query(state: AgentState):
     routerllm=create_llm(temperature=0)
     structured_llm = routerllm.with_structured_output(QueryRouter)
 
-    result: QueryRouter = structured_llm.invoke(messages)
+    try:
+        result: QueryRouter = structured_llm.invoke(messages)
+    except Exception:
+        return {"retrieve": False, "rag_query": None}
 
     return {
         "retrieve": result.retrieve,

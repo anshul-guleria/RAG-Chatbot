@@ -1,26 +1,46 @@
 services:
+  # PostgreSQL service with pgvector extension support
   postgres:
     image: pgvector/pgvector:pg17
-    container_name: rag_postgres
+    container_name: rag-postgres
     restart: unless-stopped
-
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-
     ports:
       - "${POSTGRES_PORT:-5434}:5432"
-    
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-rag}"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-postgres}"]
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
 
+  # RAG Chatbot UI & Agent service
+  rag-chatbot-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-chatbot-ui
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5000}:5000"
+    env_file:
+      - .env
+    environment:
+      - PORT=5000
+      - PYTHONUNBUFFERED=1
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - PDF_PATH=/app/dataset/Ebook-Agentic-AI.pdf
+    volumes:
+      - ./qdrant_data:/app/qdrant_data
+      - ./dataset:/app/dataset
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:

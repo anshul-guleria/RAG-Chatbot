@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chatbot | Interactive Knowledge Assistant</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Highlight.js for code formatting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Marked.js for markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <div>
+                    <h1 class="app-title">RAG Chatbot</h1>
+                    <span class="app-subtitle">Knowledge Retrieval & Reasoning Assistant</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="session-badge" id="sessionBadge" title="Current session thread">
+                    <span class="status-dot"></span>
+                    <span id="threadDisplay">Session: Ready</span>
+                </div>
+                <button class="btn btn-secondary" id="ingestBtn" title="Ingest document to vector store if not present">
+                    <i class="fa-solid fa-file-import"></i> Ingest Docs
+                </button>
+                <button class="btn btn-secondary" id="newChatBtn" title="Start a fresh conversation">
+                    <i class="fa-solid fa-plus"></i> New Chat
+                </button>
+                <button class="btn btn-outline" id="togglePanelBtn" title="Toggle retrieved chunks panel">
+                    <i class="fa-solid fa-layer-group"></i> 
+                    <span>Chunks Panel</span>
+                    <span class="badge" id="chunksCountBadge">0</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="main-layout">
+            <!-- Chat Column -->
+            <section class="chat-section">
+                <!-- Message Thread Container -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Welcome Screen -->
+                    <div class="welcome-card" id="welcomeCard">
+                        <div class="welcome-icon">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h2>Ask anything from your Knowledge Base</h2>
+                        <p>Ask questions, explore documents, and inspect the real-time retrieved chunks alongside AI responses.</p>
+                        
+                        <div class="suggestion-chips">
+                            <button class="chip" onclick="sendPrompt('What is a multi-agent system and how does it work?')">
+                                <i class="fa-regular fa-lightbulb"></i> What is a multi-agent system?
+                            </button>
+                            <button class="chip" onclick="sendPrompt('What are the key architectural components of agentic AI?')">
+                                <i class="fa-regular fa-lightbulb"></i> Key components of agentic AI
+                            </button>
+                            <button class="chip" onclick="sendPrompt('Explain the role of orchestrators and tools in agents.')">
+                                <i class="fa-regular fa-lightbulb"></i> Role of orchestrators & tools
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Box Area -->
+                <div class="chat-input-wrapper">
+                    <div class="input-card">
+                        <textarea 
+                            id="userInput" 
+                            rows="1" 
+                            placeholder="Ask a question or explore knowledge... (Press Enter to send, Shift+Enter for new line)"
+                        ></textarea>
+                        <button id="sendBtn" class="send-button" title="Send message">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                    </div>
+                    <div class="input-hint">
+                        <span><i class="fa-solid fa-bolt text-warning"></i> Powered by LangGraph & Qdrant Vector Search</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Chunks Inspector Side Panel -->
+            <aside class="chunks-panel" id="chunksPanel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa-solid fa-database text-primary"></i>
+                        <h3>Retrieved Chunks</h3>
+                    </div>
+                    <button class="icon-button" id="closePanelBtn" title="Close Panel">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="panel-info" id="panelInfo">
+                    <div class="query-info-box">
+                        <span class="info-label">Current RAG Search Query</span>
+                        <p class="query-text" id="ragQueryDisplay">No query executed yet.</p>
+                    </div>
+                </div>
+
+                <div class="chunks-list" id="chunksList">
+                    <div class="empty-chunks">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No chunks retrieved for this turn yet.</p>
+                        <span>When you ask a question requiring document search, the retrieved passages and similarity scores will appear here.</span>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
