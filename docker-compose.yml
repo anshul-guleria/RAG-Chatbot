@@ -18,30 +18,5 @@ services:
       timeout: 5s
       retries: 5
 
-  # RAG Chatbot UI & Agent service
-  rag-chatbot-ui:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: rag-chatbot-ui
-    restart: unless-stopped
-    ports:
-      - "${PORT:-5000}:5000"
-    env_file:
-      - .env
-    environment:
-      - PORT=5000
-      - VECTOR_STORE=pgvector
-      - PYTHONUNBUFFERED=1
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - PDF_PATH=/app/dataset/Ebook-Agentic-AI.pdf
-    volumes:
-      - ./qdrant_data:/app/qdrant_data
-      - ./dataset:/app/dataset
-    depends_on:
-      postgres:
-        condition: service_healthy
-
 volumes:
   postgres_data:

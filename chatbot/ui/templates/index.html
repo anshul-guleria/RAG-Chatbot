@@ -35,9 +35,11 @@
                     <span class="status-dot"></span>
                     <span id="threadDisplay">Session: Ready</span>
                 </div>
+                {% if not is_prod %}
                 <button class="btn btn-secondary" id="ingestBtn" title="Ingest document to vector store if not present">
                     <i class="fa-solid fa-file-import"></i> Ingest Docs
                 </button>
+                {% endif %}
                 <button class="btn btn-secondary" id="newChatBtn" title="Start a fresh conversation">
                     <i class="fa-solid fa-plus"></i> New Chat
                 </button>

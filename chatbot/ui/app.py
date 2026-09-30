@@ -22,9 +22,16 @@ app = Flask(
 )
 
 
+def is_production() -> bool:
+    """Check if app is running in production mode."""
+    prod_env = os.environ.get("PROD", "").lower() in ("true", "1", "yes")
+    env_mode = os.environ.get("ENV", "").lower() in ("production", "prod")
+    return prod_env or env_mode
+
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", is_prod=is_production())
 
 
 @app.route("/api/chat", methods=["POST"])
@@ -97,6 +104,9 @@ def new_thread():
 
 @app.route("/api/ingest", methods=["POST"])
 def ingest():
+    if is_production():
+        return jsonify({"error": "Ingestion is disabled in production mode. Utilizing existing vector data."}), 403
+
     try:
         from chatbot.rag.ingestion import load_and_chunk_pdf, embed_and_store_chunks
         chunks = load_and_chunk_pdf()
