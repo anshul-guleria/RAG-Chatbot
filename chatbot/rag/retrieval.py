@@ -1,4 +1,4 @@
-from vector_store import get_vector_store
+from chatbot.rag.vector_store import get_vector_store
 from rich import print as rich_print
 
 

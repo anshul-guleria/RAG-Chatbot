@@ -1,8 +1,8 @@
 '''Testing agent in CLI'''
 
-from graph import app
+from chatbot.agent.graph import app
 import uuid
-from state import AgentState
+from chatbot.agent.state import AgentState
 
 CONFIG = {
     "configurable": {"thread_id": str(uuid.uuid4())}

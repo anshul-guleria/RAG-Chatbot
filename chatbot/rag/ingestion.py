@@ -1,8 +1,8 @@
 '''Ingestion service: load, chunk, embed and store'''
 
-from loader import load_with_pypdf, save_data_to_json
+from chatbot.rag.loader import load_with_pypdf, save_data_to_json
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from vector_store import add_documents
+from chatbot.rag.vector_store import add_documents
 
 FILE_PATH=r"C:\Users\anshu\Desktop\RAG-Chatbot\dataset\Ebook-Agentic-AI.pdf"
 

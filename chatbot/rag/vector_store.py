@@ -5,7 +5,7 @@ import psycopg
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
-from embedding import documents_embedding_model
+from chatbot.rag.embedding import documents_embedding_model
 from langchain_qdrant import QdrantVectorStore
 from langchain_postgres import PGVector
 
@@ -79,7 +79,9 @@ def add_documents(chunks):
         count=len(chunks[i:i+batch_size])
         print("Ingested", count, "chunks...")
         if count<batch_size:
+            print("Ingestion completed...")
             break
         else:
+            print("Waiting ~60s for rate limit cooldown....")
             time.sleep(61)
     return vector_store

@@ -1,6 +1,6 @@
 # Simple test file to test the llm import and working
 
-from llm import create_llm
+from chatbot.agent.llm import create_llm
 import os
 from dotenv import load_dotenv
 load_dotenv()
