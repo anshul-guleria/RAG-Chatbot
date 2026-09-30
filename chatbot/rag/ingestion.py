@@ -40,7 +40,7 @@ def embed_and_store_chunks(chunks):
 
 
 def main():
-    chunks=load_and_chunk_pdf(file_path=r"C:\Users\anshu\Desktop\RAG\ANSHUL_GULERIA.pdf")
+    chunks=load_and_chunk_pdf()
     vector_store=embed_and_store_chunks(chunks)
 
 main()

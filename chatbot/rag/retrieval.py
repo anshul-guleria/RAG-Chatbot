@@ -13,11 +13,11 @@ def retrieve_with_scores(query, k=5):
     return results
 
 
-results = retrieve_with_scores("What is AI?", k=5)
+# results = retrieve_with_scores("What is AI?", k=5)
 
-for doc, score in results:
-    rich_print({
-        "score": score,
-        "content": doc.page_content,
-        "metadata": doc.metadata,
-    })
+# for doc, score in results:
+#     rich_print({
+#         "score": score,
+#         "content": doc.page_content,
+#         "metadata": doc.metadata,
+#     })

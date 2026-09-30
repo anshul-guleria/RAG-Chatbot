@@ -26,11 +26,11 @@ def get_qdrant_client():
 def get_qdrant_store():
     client = get_qdrant_client()
 
-    if not client.get_collection(COLLECTION_NAME):
+    if not client.collection_exists(collection_name=COLLECTION_NAME):
         client.create_collection(
             collection_name=COLLECTION_NAME,
             vectors_config=VectorParams(
-            size=3072,               
+            size=768,               
             distance=Distance.COSINE
         )
     )
@@ -81,6 +81,5 @@ def add_documents(chunks):
         if count<batch_size:
             break
         else:
-            break
             time.sleep(61)
     return vector_store
