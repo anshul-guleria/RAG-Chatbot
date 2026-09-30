@@ -6,6 +6,31 @@ An intelligent Retrieval-Augmented Generation (RAG) assistant with conversationa
 
 ---
 
+## App Screenshots
+
+![UI Overview](screenshots/1.png)
+
+![Chat and Context Retrieval](screenshots/2.png)
+
+![Retrieved Chunks Inspector](screenshots/3.png)
+
+![Interactive Multi-turn Conversation](screenshots/4.png)
+
+![Direct Response Routing](screenshots/5.png)
+
+---
+
+## Example Queries
+
+Here are some example queries you can ask the chatbot to test document retrieval and reasoning:
+
+- **"What areas should a company evaluate before adopting Agentic AI?"**
+- **"What are the benefits of agentic AI?"**
+- **"What are the characteristics of an AI agent?"**
+- **"What is Konverge AI?"**
+
+---
+
 ## Overview and How It Works
 
 Instead of querying the vector database on every single message (like simple greetings or casual conversation), this chatbot uses a LangGraph agent workflow:
