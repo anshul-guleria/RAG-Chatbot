@@ -23,3 +23,7 @@ dependencies = [
     "langchain-huggingface>=1.2.2",
     "sentence-transformers>=6.1.0",
 ]
+
+[tool.vercel]
+entrypoint = "chatbot.ui.app:app"
+

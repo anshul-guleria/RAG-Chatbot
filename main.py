@@ -1,6 +1,4 @@
-def main():
-    print("Hello from rag-chatbot!")
-
+from chatbot.ui.app import app
 
 if __name__ == "__main__":
-    main()
+    app.run()
