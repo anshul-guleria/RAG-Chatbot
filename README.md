@@ -44,32 +44,60 @@ Instead of querying the vector database on every single message (like simple gre
    - **LLM Providers**: Google Gemini (`gemini-2.5-flash`) or Groq (`llama-3.3-70b-versatile`).
    - **Vector Stores**: **Qdrant** (local disk/embedded) and **PostgreSQL** (`pgvector`).
 
-## Installation and Setup with UV
+## Installation and Setup
 
-This project uses `uv` for fast dependency management.
+You can install dependencies and run this project using either **`uv`** (recommended) or traditional **`pip`**.
 
-### 1. Create and Activate Virtual Environment
-```bash
-# Create a virtual environment
-uv venv
+### Option A: Using UV (Recommended)
 
-# Activate virtual environment
-# Windows:
-.venv\Scripts\activate
-# macOS / Linux:
-source .venv/bin/activate
-```
+1. **Create and activate virtual environment**:
+   ```bash
+   uv venv
 
-### 2. Install Dependencies
-```bash
-# Install all locked dependencies from uv.lock
-uv sync
-```
+   # Windows:
+   .venv\Scripts\activate
+   # macOS / Linux:
+   source .venv/bin/activate
+   ```
 
-Alternatively, you can run any project command directly with `uv run` without manually activating the virtual environment:
-```bash
-uv run python -m chatbot.ui.app
-```
+2. **Install locked dependencies**:
+   ```bash
+   uv sync
+   ```
+
+3. **Adding new dependencies**:
+   ```bash
+   uv add <package-name>
+   ```
+
+4. **Running commands directly with UV**:
+   ```bash
+   uv run python -m chatbot.ui.app
+   ```
+
+---
+
+### Option B: Using Pip
+
+1. **Create and activate virtual environment**:
+   ```bash
+   python -m venv .venv
+
+   # Windows:
+   .venv\Scripts\activate
+   # macOS / Linux:
+   source .venv/bin/activate
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Adding new dependencies**:
+   ```bash
+   pip install <package-name>
+   ```
 
 ---
 
@@ -100,7 +128,7 @@ GROQ_MODEL=llama-3.3-70b-versatile
 VECTOR_STORE=qdrant
 QDRANT_PATH=./qdrant_data
 
-# PostgreSQL / PGVector (Only needed if VECTOR_STORE=pgvector)
+# Optional: PostgreSQL / PGVector (Only needed if VECTOR_STORE=pgvector)
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_DB=postgres
@@ -108,6 +136,21 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 
 PORT=5000
+PROD=false
+```
+
+---
+
+## Optional: Starting PostgreSQL for PGVector
+
+If you choose `VECTOR_STORE=pgvector`, you can spin up the PostgreSQL database with `pgvector` pre-configured using Docker:
+
+```bash
+# Start only the PostgreSQL vector database
+docker compose up -d postgres
+
+# Stop the database
+docker compose down
 ```
 
 ---
@@ -117,7 +160,7 @@ PORT=5000
 The ingestion pipeline loads PDFs placed in the `dataset/` directory, chunks them with `RecursiveCharacterTextSplitter`, generates vector embeddings, and stores them in your vector database.
 
 ### How to Ingest:
-- **Via Web UI**: Open the UI and click the **"Ingest Docs"** button in the top navigation bar.
+- **Via Web UI**: Open the UI and click the **"Ingest Docs"** button in the top navigation bar (available when `PROD=false`).
 - **Via CLI**: Run the ingestion script directly:
   ```bash
   python -m chatbot.rag.ingestion
@@ -128,11 +171,10 @@ The ingestion pipeline loads PDFs placed in the `dataset/` directory, chunks the
 - To stay within free-tier rate limits for embedding APIs, the script waits ~60 seconds between batches.
 - A typical document (~100–200 chunks) takes around **2 to 3 minutes** to ingest.
 - Once ingested, vectors are stored permanently (in `./qdrant_data` or Postgres) and subsequent searches are instant.
-- During ingestion, the qdrant will get locked so cant chat for that duration (~3 minutes)
 
 ---
 
-## 3 Ways to Run the Project
+## How to Run the Project
 
 ### 1. Terminal / CLI Mode
 Run the conversational agent directly in your command line:
@@ -152,20 +194,3 @@ python -m chatbot.ui.app
 
 Then visit **http://127.0.0.1:5000** in your browser.
 
----
-
-### 3. Docker and Docker Compose (One-Click Deployment)
-Run both the application and the database in isolated containers:
-
-```bash
-# Build and start all services
-docker compose up --build -d
-
-# View logs
-docker compose logs -f
-
-# Stop containers
-docker compose down
-```
-
-Access the UI at **http://localhost:5000**.
