@@ -5,7 +5,7 @@ import psycopg
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
-from chatbot.rag.embedding import documents_embedding_model
+from chatbot.rag.embedding import get_embedding_model
 from langchain_qdrant import QdrantVectorStore
 from langchain_postgres import PGVector
 
@@ -14,6 +14,7 @@ load_dotenv()
 VECTOR_STORE = os.getenv("VECTOR_STORE", "qdrant")
 COLLECTION_NAME = "document_chunks"
 
+documents_embedding_model=get_embedding_model()
 
 def get_qdrant_client():
     return QdrantClient(
@@ -82,6 +83,7 @@ def add_documents(chunks):
             print("Ingestion completed...")
             break
         else:
-            print("Waiting ~60s for rate limit cooldown....")
-            time.sleep(61)
+            if os.getenv("EMDEDDING_PROVIDER")=='gemini':
+                print("Waiting ~60s for rate limit cooldown....")
+                time.sleep(61)
     return vector_store
