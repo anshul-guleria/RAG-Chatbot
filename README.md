@@ -44,6 +44,33 @@ Instead of querying the vector database on every single message (like simple gre
    - **LLM Providers**: Google Gemini (`gemini-2.5-flash`) or Groq (`llama-3.3-70b-versatile`).
    - **Vector Stores**: **Qdrant** (local disk/embedded) and **PostgreSQL** (`pgvector`).
 
+## Installation and Setup with UV
+
+This project uses `uv` for fast dependency management.
+
+### 1. Create and Activate Virtual Environment
+```bash
+# Create a virtual environment
+uv venv
+
+# Activate virtual environment
+# Windows:
+.venv\Scripts\activate
+# macOS / Linux:
+source .venv/bin/activate
+```
+
+### 2. Install Dependencies
+```bash
+# Install all locked dependencies from uv.lock
+uv sync
+```
+
+Alternatively, you can run any project command directly with `uv run` without manually activating the virtual environment:
+```bash
+uv run python -m chatbot.ui.app
+```
+
 ---
 
 ## Environment Configuration
