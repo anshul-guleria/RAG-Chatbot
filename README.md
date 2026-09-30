@@ -66,7 +66,7 @@ Instead of querying the vector database on every single message (like simple gre
 3. **Conversational Memory**:
    - Powered by LangGraph's `InMemorySaver` checkpointer using per-session thread IDs.
 4. **Flexible LLM & Vector Store Backends**:
-   - **LLM Providers**: Google Gemini (`gemini-2.5-flash`) or Groq (`llama-3.3-70b-versatile`).
+   - **LLM Providers**: Google Gemini or Groq.
    - **Vector Stores**: **Qdrant** (local disk/embedded) and **PostgreSQL** (`pgvector`).
 
 ## Installation and Setup
@@ -138,16 +138,19 @@ cp .env.example .env
 
 ```env
 # Model Provider ('google' or 'groq')
-MODEL_PROVIDER=google
+MODEL_PROVIDER=groq
 
 # Google Gemini API Settings
 GOOGLE_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
-GEMINI_EMBEDDING_MODEL=models/text-embedding-004
+GEMINI_MODEL=gemini-3.1-flash-lite
+
+EMBEDDING_PROVIDER=huggingface         # or gemini
+HUGGINGFACE_EMBEDDING_MODEL=BAAI/bge-base-en-v1.5
+GEMINI_EMBEDDING_MODEL=gemini-embedding-001
 
 # Groq API Settings (if using MODEL_PROVIDER=groq)
 GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_MODEL=openai/gpt-oss-20b
 
 # Vector Store Selection ('qdrant' or 'pgvector')
 VECTOR_STORE=qdrant
